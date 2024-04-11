@@ -10,8 +10,9 @@ void setup()
   // taxa de leitura do sensor
   Serial.begin(9600);
 
-  // informa que a porta digital A0 vai ler os dados do sensor
+  // informa modo de operacao das portas analogicas e digitais
   pinMode(A0, INPUT);
+  pinMode(13, OUTPUT);
 
   // inicia o lcd
   lcd.begin(16, 2);
@@ -19,6 +20,9 @@ void setup()
 
 void loop()
 {
+
+  // inicia o rele com valor logico baixo
+  digitalWrite(13, HIGH);
   // armazena o dado lido pelo sensor
   int sensorValue = analogRead(A0);
 
@@ -37,6 +41,16 @@ void loop()
     delay(700);
     Serial.println("ta ativado");
     alarme = alarme - 1;
+  }
+
+  // inicia ciclo de regam quando disparado o alarme
+  if (sensorValue > 700 && alarme <= 0)
+  {
+    lcd.clear();
+    lcd.setCursor(0, 1);
+    lcd.print("CICLO DE REGAGEM");
+    digitalWrite(13, LOW) ';' delay(1000);
+    digitalWrite(13, HIGH);
   }
 
   lcd.clear();
